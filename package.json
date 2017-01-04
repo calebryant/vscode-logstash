@@ -1,19 +1,15 @@
 {
     "name": "vscode-logstash",
-    "publisher": "Emmanuel DEMEY",
+    "publisher": "vscode-logstash",
     "displayName": "Logstash Snippets",
     "description": "Logstash snippets",
     "icon": "images/logstash.svg",
-    "galleryBanner": {
-        "color": "#eff1f3",
-        "theme": "dark"
-    },
     "license": "SEE LICENSE IN LICENSE.md",
     "repository": {
         "type": "git",
         "url": "https://github.com/Gillespie59/vscode-logstash.git"
     },
-    "version": "1.0.0",
+    "version": "1.0.1",
     "engines": {
         "vscode": "^0.10.x"
     },
