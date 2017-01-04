@@ -1,0 +1,44 @@
+{
+    "name": "vscode-logstash",
+    "publisher": "Emmanuel DEMEY",
+    "displayName": "Logstash Snippets",
+    "description": "Logstash snippets",
+    "icon": "images/logstash.svg",
+    "galleryBanner": {
+        "color": "#eff1f3",
+        "theme": "dark"
+    },
+    "license": "SEE LICENSE IN LICENSE.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Gillespie59/vscode-logstash.git"
+    },
+    "version": "1.0.0",
+    "engines": {
+        "vscode": "^0.10.x"
+    },
+    "categories": [
+        "Snippets"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "logstash",
+            "aliases": ["Logstash", "logstash"],
+            "extensions": [".logstash.conf"]
+        }],
+        "snippets": [
+            {
+                "language": "logstash",
+                "path": "./snippets/logstash-inputs.json"
+            },
+            {
+                "language": "logstash",
+                "path": "./snippets/logstash-outputs.json"
+            },
+            {
+                "language": "logstash",
+                "path": "./snippets/logstash-filters.json"
+            }
+        ]
+    }
+}

@@ -1,0 +1,577 @@
+{
+  "output": {
+    "prefix": "lo",
+    "body": [
+      "output {",
+      "",
+      "}"
+
+    ],
+    "description": "Logstash Ouput"
+  },
+  "boundary": {
+    "prefix": "lo-boundary",
+    "body": [
+      "boundary {",
+      "\tapi_key => \"${api_key}\"",
+      "\torg_id => \"${org_id}\"",
+      "}"
+
+    ],
+    "description": "Logstash boundary Ouput"
+  },
+  "circonus": {
+    "prefix": "lo-circonus",
+    "body": [
+      "output {",
+      "\tannotation => [\"${key}\": \"${value}\"]",
+      "\tapi_token => \"${api_token}\"",
+      "\tapp_name => \"${app_name}\"",
+      "}"
+
+    ],
+    "description": "Logstash circonus Ouput"
+  },
+  "cloudwatch": {
+    "prefix": "lo-cloudwatch",
+    "body": [
+      "cloudwatch {",
+      "}"
+
+    ],
+    "description": "Logstash cloudwatch Ouput"
+  },
+  "csv": {
+    "prefix": "lo-csv",
+    "body": [
+      "csv {",
+      "\tfields => [\"${field}\"]",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash csv Ouput"
+  },
+  "datadog ": {
+    "prefix": "lo-datadog ",
+    "body": [
+      "datadog  {",
+      "\tapi_key => \"${api_key}\"",
+      "}"
+
+    ],
+    "description": "Logstash datadog Ouput"
+  },
+  "datadog_metrics": {
+    "prefix": "lo-datadog_metrics",
+    "body": [
+      "datadog_metrics {",
+      "\tapi_key => \"${api_key}\"",
+      "}"
+
+    ],
+    "description": "Logstash datadog_metrics Ouput"
+  },
+  "elasticsearch": {
+    "prefix": "lo-elasticsearch",
+    "body": [
+      "elasticsearch {",
+      "}"
+
+    ],
+    "description": "Logstash elasticsearch Ouput"
+  },
+  "email": {
+    "prefix": "lo-email",
+    "body": [
+      "email {",
+      "\tto => \"${to}\"",
+      "}"
+
+    ],
+    "description": "Logstash email Ouput"
+  },
+  "exec": {
+    "prefix": "lo-exec",
+    "body": [
+      "exec {",
+      "\tcommand => \"${command}\"",
+      "}"
+
+    ],
+    "description": "Logstash exec Ouput"
+  },
+  "file": {
+    "prefix": "lo-file",
+    "body": [
+      "file {",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash file Ouput"
+  },
+  "ganglia": {
+    "prefix": "lo-ganglia",
+    "body": [
+      "ganglia {",
+      "\tmetric => \"${metric}\"",
+      "\tvalue => \"${value}\"",
+      "}"
+
+    ],
+    "description": "Logstash ganglia Ouput"
+  },
+  "gelf": {
+    "prefix": "lo-gelf",
+    "body": [
+      "gelf {",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash gelf Ouput"
+  },
+  "google_bigquery": {
+    "prefix": "lo-google_bigquery",
+    "body": [
+      "google_bigquery {",
+      "\tdataset => \"${dataset}\"",
+      "\tkey_path => \"${key_path}\"",
+      "\tproject_id => \"${project_id}\"",
+      "\tservice_account => \"${service_account}\"",
+      "}"
+
+    ],
+    "description": "Logstash google_bigquery Ouput"
+  },
+  "google_cloud_storage": {
+    "prefix": "lo-google_cloud_storage",
+    "body": [
+      "google_cloud_storage {",
+      "\tbucket => \"${bucket}\"",
+      "\tkey_path => \"${key_path}\"",
+      "\tservice_account => \"${service_account}\"",
+      "}"
+
+    ],
+    "description": "Logstash google_cloud_storage Ouput"
+  },
+  "graphite": {
+    "prefix": "lo-graphite",
+    "body": [
+      "graphite {",
+      "}"
+
+    ],
+    "description": "Logstash graphite Ouput"
+  },
+  "graphtastic": {
+    "prefix": "lo-graphtastic",
+    "body": [
+      "graphtastic {",
+      "}"
+
+    ],
+    "description": "Logstash graphtastic Ouput"
+  },
+  "hipchat": {
+    "prefix": "lo-hipchat",
+    "body": [
+      "hipchat {",
+      "\troom_id => \"${room_id}\"",
+      "\ttoken => \"${token}\"",
+      "}"
+
+    ],
+    "description": "Logstash hipchat Ouput"
+  },
+  "http": {
+    "prefix": "lo-http",
+    "body": [
+      "http {",
+      "\thttp_method => \"${http_method}\"",
+      "\turl => \"${url}\"",
+      "}"
+
+    ],
+    "description": "Logstash http Ouput"
+  },
+  "influxdb": {
+    "prefix": "lo-influxdb",
+    "body": [
+      "influxdb {",
+      "\thost => \"${host}\"",
+      "\tdata_points => ${data_points}",
+      "}"
+
+    ],
+    "description": "Logstash influxdb Ouput"
+  },
+  "irc": {
+    "prefix": "lo-irc",
+    "body": [
+      "irc {",
+      "\tchannels => [\"${channel}\"]",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash irc Ouput"
+  },
+  "jira": {
+    "prefix": "lo-jira",
+    "body": [
+      "jira {",
+      "\tissuetypeid => \"${issuetypeid}\"",
+      "\tusername => \"${username}\"",
+      "\tpassword => \"${password}\"",
+      "\tpriority  => \"${priority }\"",
+      "\tprojectid => \"${projectid}\"",
+      "\tsummary => \"${summary}\"",
+      "}"
+
+    ],
+    "description": "Logstash jira Ouput"
+  },
+  "juggernaut": {
+    "prefix": "lo-juggernaut",
+    "body": [
+      "juggernaut {",
+      "\tchannels => [\"${channel}\"]",
+      "}"
+
+    ],
+    "description": "Logstash juggernaut Ouput"
+  },
+  "kafka": {
+    "prefix": "lo-kafka",
+    "body": [
+      "kafka {",
+      "\ttopic_id => \"${topic_id}\"",
+      "}"
+
+    ],
+    "description": "Logstash kafka Ouput"
+  },
+  "librato": {
+    "prefix": "lo-librato",
+    "body": [
+      "librato {",
+      "\taccount_id => \"${account_id}\"",
+      "\tapi_token => \"${api_token}\"",
+      "}"
+
+    ],
+    "description": "Logstash librato Ouput"
+  },
+  "loggly": {
+    "prefix": "lo-loggly",
+    "body": [
+      "loggly {",
+      "\tkey => \"${key}\"",
+      "}"
+
+    ],
+    "description": "Logstash loggly Ouput"
+  },
+  "lumberjack": {
+    "prefix": "lo-lumberjack",
+    "body": [
+      "lumberjack {",
+      "\thosts => [\"${host}\"]",
+      "\tport => ${port}",
+      "\tssl_certificate => \"${ssl_certificate}\"",
+      "}"
+
+    ],
+    "description": "Logstash lumberjack Ouput"
+  },
+  "metriccatcher": {
+    "prefix": "lo-metriccatcher",
+    "body": [
+      "metriccatcher {",
+      "}"
+
+    ],
+    "description": "Logstash metriccatcher Ouput"
+  },
+  "mongodb": {
+    "prefix": "lo-mongodb",
+    "body": [
+      "mongodb {",
+      "\turi => \"${uri}\"",
+      "\tdatabase => \"${database}\"",
+      "\tcollection => \"${collection}\"",
+      "}"
+
+    ],
+    "description": "Logstash mongodb Ouput"
+  },
+  "nagios": {
+    "prefix": "lo-nagios",
+    "body": [
+      "nagios {",
+      "}"
+
+    ],
+    "description": "Logstash nagios Ouput"
+  },
+  "nagios_nsca": {
+    "prefix": "lo-nagios_nsca",
+    "body": [
+      "nagios_nsca {",
+      "\tnagios_status => \"${nagios_status}\"",
+      "}"
+
+    ],
+    "description": "Logstash nagios_nsca Ouput"
+  },
+  "newrelic": {
+    "prefix": "lo-newrelic",
+    "body": [
+      "newrelic {",
+      "\taccount_id => \"${account_id}\"",
+      "\tinsert_key => \"${insert_key}\"",
+      "}"
+
+    ],
+    "descriptio-n": "Logstash newrelic Ouput"
+  },
+  "opentsdb": {
+    "prefix": "lo-opentsdb",
+    "body": [
+      "opentsdb {",
+      "\tmetrics => [\"${metrics}\"]",
+      "}"
+
+    ],
+    "description": "Logstash opentsdb Ouput"
+  },
+  "pagerduty": {
+    "prefix": "lo-pagerduty",
+    "body": [
+      "pagerduty {",
+      "\tservice_key => \"${service_key}\"",
+      "}"
+
+    ],
+    "description": "Logstash pagerduty Ouput"
+  },
+  "pipe": {
+    "prefix": "lo-pipe",
+    "body": [
+      "pipe {",
+      "\tcommand => \"${command}\"",
+      "}"
+
+    ],
+    "description": "Logstash pipe Ouput"
+  },
+  "rabbitmq": {
+    "prefix": "lo-rabbitmq",
+    "body": [
+      "rabbitmq {",
+      "\texchange => \"${exchange}\"",
+      "\texchange_type => \"${exchange_type}\"",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash rabbitmq Ouput"
+  },
+  "rackspace": {
+    "prefix": "lo-rackspace",
+    "body": [
+      "rackspace {",
+      "\tapi_key => \"${api_key}\"",
+      "\tusername => \"${username}\"",
+      "}"
+
+    ],
+    "description": "Logstash rackspace Ouput"
+  },
+  "redis": {
+    "prefix": "lo-redis",
+    "body": [
+      "redis {",
+      "}"
+
+    ],
+    "description": "Logstash redis Ouput"
+  },
+  "redmine": {
+    "prefix": "lo-redmine",
+    "body": [
+      "redmine {",
+      "\tpriority_id => ${priority_id}",
+      "\tproject_id => ${project_id}",
+      "\tstatus_id => ${status_id}",
+      "\ttoken => \"${token}\"",
+      "\ttracker_id => ${tracker_id}",
+      "\turl => \"${url}\"",
+      "}"
+
+    ],
+    "description": "Logstash redmine Ouput"
+  },
+  "riak": {
+    "prefix": "lo-riak",
+    "body": [
+      "riak {",
+      "}"
+
+    ],
+    "description": "Logstash riak Ouput"
+  },
+  "riemann": {
+    "prefix": "lo-riemann",
+    "body": [
+      "riemann {",
+      "}"
+
+    ],
+    "description": "Logstash riemann Ouput"
+  },
+  "s3": {
+    "prefix": "lo-s3",
+    "body": [
+      "s3 {",
+      "}"
+
+    ],
+    "description": "Logstash s3 Ouput"
+  },
+  "sns": {
+    "prefix": "lo-sns",
+    "body": [
+      "sns {",
+      "}"
+
+    ],
+    "description": "Logstash sns Ouput"
+  },
+  "solr_http": {
+    "prefix": "lo-solr_http",
+    "body": [
+      "solr_http {",
+      "}"
+
+    ],
+    "description": "Logstash solr_http Ouput"
+  },
+  "sqs": {
+    "prefix": "lo-sqs",
+    "body": [
+      "sqs {",
+      "\tqueue => \"${queue}\"",
+      "}"
+
+    ],
+    "description": "Logstash sqs Ouput"
+  },
+  "statsd": {
+    "prefix": "lo-statsd",
+    "body": [
+      "statsd {",
+      "}"
+
+    ],
+    "description": "Logstash statsd Ouput"
+  },
+  "stdout": {
+    "prefix": "lo-stdout",
+    "body": [
+      "stdout {",
+      "}"
+
+    ],
+    "description": "Logstash stdout Ouput"
+  },
+  "stomp": {
+    "prefix": "lo-stomp",
+    "body": [
+      "stomp {",
+      "\tdestination => \"${destination}\"",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash stomp Ouput"
+  },
+  "tcp": {
+    "prefix": "lo-tcp",
+    "body": [
+      "tcp {",
+      "\thost => \"${host}\"",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash tcp Ouput"
+  },
+  "udp": {
+    "prefix": "lo-udp",
+    "body": [
+      "udp {",
+      "\thost => \"${host}\"",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash udp Ouput"
+  },
+  "webhdfs": {
+    "prefix": "lo-webhdfs",
+    "body": [
+      "webhdfs {",
+      "\thost => \"${host}\"",
+      "\tpath => \"${path}\"",
+      "\tuser => \"${user}\"",
+      "}"
+
+    ],
+    "description": "Logstash webhdfs Ouput"
+  },
+  "websocket": {
+    "prefix": "lo-websocket",
+    "body": [
+      "websocket {",
+      "}"
+
+    ],
+    "description": "Logstash websocket Ouput"
+  },
+  "xmpp": {
+    "prefix": "lo-xmpp",
+    "body": [
+      "xmpp {",
+      "\tuser => \"${user}\"",
+      "\tpassword => \"${password}\"",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash xmpp Ouput"
+  },
+  "zabbix": {
+    "prefix": "lo-zabbix",
+    "body": [
+      "zabbix {",
+      "\tzabbix_host => \"${zabbix_host}\"",
+      "}"
+
+    ],
+    "description": "Logstash zabbix Ouput"
+  },
+  "zeromq": {
+    "prefix": "lo-zeromq",
+    "body": [
+      "zeromq {",
+      "\ttopology => \"${topology}\"",
+      "}"
+
+    ],
+    "description": "Logstash zeromq Ouput"
+  }
+}

@@ -1,0 +1,416 @@
+{
+  "filter": {
+    "prefix": "lf",
+    "body": [
+      "filter {",
+      "",
+      "}"
+
+    ],
+    "description": "Logstash Filter"
+  },
+  "aggregate": {
+    "prefix": "lf-aggregate",
+    "body": [
+      "aggregate {",
+      "\tcode => \"${code}\"",
+      "\ttask_id => \"${task_id}\"",
+      "}"
+    ],
+    "description": "Logstash aggregate Filter"
+  },
+  "alter": {
+    "prefix": "lf-alter",
+    "body": [
+      "alter {",
+      "}"
+    ],
+    "description": "Logstash alter Filter"
+  },
+  "anonymize": {
+    "prefix": "lf-anonymize",
+    "body": [
+      "anonymize {",
+      "\talgorithm => \"${algorithm}\"",
+      "\tkey => \"${key}\"",
+      "\tfields => [\"${field}\"]",
+      "}"
+    ],
+    "description": "Logstash anonymize Filter"
+  },
+  "cidr": {
+    "prefix": "lf-cidr",
+    "body": [
+      "cidr {",
+      "}"
+    ],
+    "description": "Logstash cidr Filter"
+  },
+  "cipher": {
+    "prefix": "lf-cipher",
+    "body": [
+      "cipher {",
+      "\talgorithm => \"${algorithm}\"",
+      "\tmode => \"${mode}\"",
+      "}"
+    ],
+    "description": "Logstash cipher Filter"
+  },
+  "clone": {
+    "prefix": "lf-clone",
+    "body": [
+      "clone {",
+      "}"
+    ],
+    "description": "Logstash clone Filter"
+  },
+  "collate": {
+    "prefix": "lf-collate",
+    "body": [
+      "collate {",
+      "}"
+    ],
+    "description": "Logstash collate Filter"
+  },
+  "csv": {
+    "prefix": "lf-csv",
+    "body": [
+      "csv {",
+      "}"
+    ],
+    "description": "Logstash csv Filter"
+  },
+  "date": {
+    "prefix": "lf-date",
+    "body": [
+      "date {",
+      "\tmatch => [\"${date}\", \"${format}\"]",
+      "}"
+    ],
+    "description": "Logstash date Filter"
+  },
+  "de_dot": {
+    "prefix": "lf-de_dot",
+    "body": [
+      "de_dot {",
+      "}"
+    ],
+    "description": "Logstash de_dot Filter"
+  },
+  "dissect": {
+    "prefix": "lf-dissect",
+    "body": [
+      "dissect {",
+      "}"
+    ],
+    "description": "Logstash dissect Filter"
+  },
+  "dns": {
+    "prefix": "lf-dns",
+    "body": [
+      "dns {",
+      "}"
+    ],
+    "description": "Logstash dns Filter"
+  },
+  "drop": {
+    "prefix": "lf-drop",
+    "body": [
+      "drop {",
+      "}"
+    ],
+    "description": "Logstash drop Filter"
+  },
+  "elapsed": {
+    "prefix": "lf-elapsed",
+    "body": [
+      "elapsed {",
+      "\tstart_tag => \"${start_tag}\"",
+      "\tend_tag => \"${end_tag}\"",
+      "\tunique_id_field => \"${unique_id_field}\"",
+      "}"
+    ],
+    "description": "Logstash elapsed Filter"
+  },
+  "elasticsearch": {
+    "prefix": "lf-elasticsearch",
+    "body": [
+      "elasticsearch {",
+      "}"
+    ],
+    "description": "Logstash elasticsearch Filter"
+  },
+  "environment": {
+    "prefix": "lf-environment",
+    "body": [
+      "environment {",
+      "}"
+    ],
+    "description": "Logstash environment Filter"
+  },
+  "extractnumbers": {
+    "prefix": "lf-extractnumbers",
+    "body": [
+      "extractnumbers {",
+      "}"
+    ],
+    "description": "Logstash extractnumbers Filter"
+  },
+  "fingerprint": {
+    "prefix": "lf-fingerprint",
+    "body": [
+      "fingerprint {",
+      "\tmethod => \"${method}\"",
+      "}"
+    ],
+    "description": "Logstash fingerprint Filter"
+  },
+  "geoip": {
+    "prefix": "lf-geoip",
+    "body": [
+      "geoip {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash geoip Filter"
+  },
+  "grok": {
+    "prefix": "lf-grok",
+    "body": [
+      "grok {",
+      "\tmatch => { \"${field}\" => \"${pattern\"}",
+      "}"
+    ],
+    "description": "Logstash grok Filter"
+  },
+  "i18n": {
+    "prefix": "lf-i18n",
+    "body": [
+      "i18n {",
+      "}"
+    ],
+    "description": "Logstash i18n Filter"
+  },
+  "json": {
+    "prefix": "lf-json",
+    "body": [
+      "json {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash json Filter"
+  },
+  "json_encode": {
+    "prefix": "lf-json_encode",
+    "body": [
+      "json_encode {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash json_encode Filter"
+  },
+  "kv": {
+    "prefix": "lf-kv",
+    "body": [
+      "kv {",
+      "}"
+    ],
+    "description": "Logstash kv Filter"
+  },
+  "metaevent": {
+    "prefix": "lf-metaevent",
+    "body": [
+      "metaevent {",
+      "\tfollowed_by_tags => [\"${tag}\"]",
+      "}"
+    ],
+    "description": "Logstash metaevent Filter"
+  },
+  "metricize": {
+    "prefix": "lf-metricize",
+    "body": [
+      "metricize {",
+      "\tmetrics => [\"${metric}\"]",
+      "}"
+    ],
+    "description": "Logstash metricize Filter"
+  },
+  "metrics": {
+    "prefix": "lf-metrics",
+    "body": [
+      "metrics {",
+      "}"
+    ],
+    "description": "Logstash metrics Filter"
+  },
+  "multiline": {
+    "prefix": "lf-multiline",
+    "body": [
+      "multiline {",
+      "\tpattern => \"${pattern}\"",
+      "\twhat => \"${what}\"",
+      "}"
+    ],
+    "description": "Logstash multiline Filter"
+  },
+  "mutate": {
+    "prefix": "lf-mutate",
+    "body": [
+      "mutate {",
+      "}"
+    ],
+    "description": "Logstash mutate Filter"
+  },
+  "oui": {
+    "prefix": "lf-oui",
+    "body": [
+      "oui {",
+      "}"
+    ],
+    "description": "Logstash oui Filter"
+  },
+  "prune": {
+    "prefix": "lf-prune",
+    "body": [
+      "prune {",
+      "}"
+    ],
+    "description": "Logstash prune Filter"
+  },
+  "punct": {
+    "prefix": "lf-punct",
+    "body": [
+      "punct {",
+      "}"
+    ],
+    "description": "Logstash punct Filter"
+  },
+  "range": {
+    "prefix": "lf-range",
+    "body": [
+      "range {",
+      "}"
+    ],
+    "description": "Logstash range Filter"
+  },
+  "ruby": {
+    "prefix": "lf-ruby",
+    "body": [
+      "ruby {",
+      "\tcode => \"${code}\"",
+      "}"
+    ],
+    "description": "Logstash ruby Filter"
+  },
+  "sleep": {
+    "prefix": "lf-sleep",
+    "body": [
+      "sleep {",
+      "}"
+    ],
+    "description": "Logstash sleep Filter"
+  },
+  "split": {
+    "prefix": "lf-split",
+    "body": [
+      "split {",
+      "}"
+    ],
+    "description": "Logstash split Filter"
+  },
+  "syslog_pri": {
+    "prefix": "lf-syslog_pri",
+    "body": [
+      "syslog_pri {",
+      "}"
+    ],
+    "description": "Logstash syslog_pri Filter"
+  },
+  "throttle": {
+    "prefix": "lf-throttle",
+    "body": [
+      "throttle {",
+      "\tkey => \"${key}\"",
+      "}"
+    ],
+    "description": "Logstash throttle Filter"
+  },
+  "tld": {
+    "prefix": "lf-tld",
+    "body": [
+      "tld {",
+      "}"
+    ],
+    "description": "Logstash tld Filter"
+  },
+  "translate": {
+    "prefix": "lf-translate",
+    "body": [
+      "translate {",
+      "\tfield => \"${field}\"",
+      "}"
+    ],
+    "description": "Logstash translate Filter"
+  },
+  "truncate": {
+    "prefix": "lf-truncate",
+    "body": [
+      "truncate {",
+      "\tlength_bytes => ${length_bytes}",
+      "}"
+    ],
+    "description": "Logstash truncate Filter"
+  },
+  "urldecode": {
+    "prefix": "lf-urldecode",
+    "body": [
+      "urldecode {",
+      "}"
+    ],
+    "description": "Logstash urldecode Filter"
+  },
+  "useragent": {
+    "prefix": "lf-useragent",
+    "body": [
+      "useragent {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash useragent Filter"
+  },
+  "uuid": {
+    "prefix": "lf-uuid",
+    "body": [
+      "uuid {",
+      "\ttarget => \"${target}\"",
+      "}"
+    ],
+    "description": "Logstash uuid Filter"
+  },
+  "xml": {
+    "prefix": "lf-xml",
+    "body": [
+      "xml {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash xml Filter"
+  },
+  "yaml": {
+    "prefix": "lf-yaml",
+    "body": [
+      "yaml {",
+      "\tsource => \"${source}\"",
+      "}"
+    ],
+    "description": "Logstash yaml Filter"
+  },
+  "zeromq": {
+    "prefix": "lf-zeromq",
+    "body": [
+      "zeromq {",
+      "}"
+    ],
+    "description": "Logstash zeromq Filter"
+  }
+}

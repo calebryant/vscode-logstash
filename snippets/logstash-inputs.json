@@ -1,0 +1,539 @@
+{
+  "input": {
+    "prefix": "li",
+    "body": [
+      "input {",
+      "",
+      "}"
+
+    ],
+    "description": "Logstash Input"
+  },
+  "beats": {
+    "prefix": "li-beats",
+    "body": [
+      "beats {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash Beats Input"
+  },
+  "cloudwatch": {
+    "prefix": "li-cloudwatch",
+    "body": [
+      "cloudwatch {",
+      "\tfilters => { ${key} => \"${value}\" }",
+      "}"
+
+    ],
+    "description": "Logstash Cloudwatch Input"
+  },
+  "couchdb_changes": {
+    "prefix": "li-couchdb_changes",
+    "body": [
+      "couchdb_changes {",
+      "\tdb => \"${db}\"",
+      "}"
+
+    ],
+    "description": "Logstash couchdb_changes Input"
+  },
+  "drupal_dblog": {
+    "prefix": "li-drupal_dblog",
+    "body": [
+      "drupal_dblog {",
+      "}"
+
+    ],
+    "description": "Logstash drupal_dblog Input"
+  },
+  "elasticsearch": {
+    "prefix": "li-elasticsearch",
+    "body": [
+      "elasticsearch {",
+      "}"
+
+    ],
+    "description": "Logstash elasticsearch Input"
+  },
+  "eventlog": {
+    "prefix": "li-eventlog",
+    "body": [
+      "eventlog {",
+      "}"
+
+    ],
+    "description": "Logstash eventlog Input"
+  },
+  "exec": {
+    "prefix": "li-exec",
+    "body": [
+      "exec {",
+      "\tcommand => \"${command}\"",
+      "\tinterval => ${interval}",
+      "}"
+
+    ],
+    "description": "Logstash exec Input"
+  },
+  "file ": {
+    "prefix": "li-file",
+    "body": [
+      "file {",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash file Input"
+  },
+  "ganglia": {
+    "prefix": "li-ganglia",
+    "body": [
+      "ganglia {",
+      "}"
+
+    ],
+    "description": "Logstash ganglia Input"
+  },
+  "gelf": {
+    "prefix": "li-gelf",
+    "body": [
+      "gelf {",
+      "}"
+
+    ],
+    "description": "Logstash gelf Input"
+  },
+  "gemfire": {
+    "prefix": "li-gemfire",
+    "body": [
+      "gemfire {",
+      "}"
+
+    ],
+    "description": "Logstash gemfire Input"
+  },
+  "generator": {
+    "prefix": "li-generator",
+    "body": [
+      "generator {",
+      "}"
+
+    ],
+    "description": "Logstash generator Input"
+  },
+  "github": {
+    "prefix": "li-github",
+    "body": [
+      "github {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash github Input"
+  },
+  "graphite": {
+    "prefix": "li-graphite",
+    "body": [
+      "graphite {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash graphite Input"
+  },
+  "heartbeat": {
+    "prefix": "li-heartbeat",
+    "body": [
+      "heartbeat {",
+      "}"
+
+    ],
+    "description": "Logstash heartbeat Input"
+  },
+  "heroku": {
+    "prefix": "li-heroku",
+    "body": [
+      "heroku {",
+      "\tapp => \"${app}\"",
+      "}"
+
+    ],
+    "description": "Logstash heroku Input"
+  },
+  "http": {
+    "prefix": "li-http",
+    "body": [
+      "http {",
+      "}"
+
+    ],
+    "description": "Logstash http Input"
+  },
+  "http_poller": {
+    "prefix": "li-http_poller",
+    "body": [
+      "http_poller {",
+      "\turls => {",
+      "\t\t${key} => \"${value}\"",
+      "\t}",
+      "}"
+
+    ],
+    "description": "Logstash http_poller Input"
+  },
+  "imap": {
+    "prefix": "li-imap",
+    "body": [
+      "imap {",
+      "\thost => \"${host}\"",
+      "\tuser => \"${user}\"",
+      "\tpassword => \"${password}\"",
+      "}"
+
+    ],
+    "description": "Logstash imap Input"
+  },
+  "irc": {
+    "prefix": "li-irc",
+    "body": [
+      "irc {",
+      "\tchannels => [\"${channel}\"]",
+      "\thost => \"${host}\"",
+      "}"
+
+    ],
+    "description": "Logstash irc Input"
+  },
+  "jdbc": {
+    "prefix": "li-jdbc",
+    "body": [
+      "jdbc {",
+      "\tjdbc_connection_string => \"${jdbc_connection_string}\"",
+      "\tjdbc_driver_class => \"${jdbc_driver_class}\"",
+      "\tjdbc_user => \"${jdbc_user}\"",
+      "}"
+
+    ],
+    "description": "Logstash jdbc Input"
+  },
+  "jmx": {
+    "prefix": "li-jmx",
+    "body": [
+      "jmx {",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash jmx Input"
+  },
+  "kafka": {
+    "prefix": "li-kafka",
+    "body": [
+      "kafka {",
+      "}"
+
+    ],
+    "description": "Logstash kafka Input"
+  },
+  "kinesis": {
+    "prefix": "li-kinesis",
+    "body": [
+      "kinesis {",
+      "\tkinesis_stream_name => \"${kinesis_stream_name}\"",
+      "}"
+
+    ],
+    "description": "Logstash kinesis Input"
+  },
+  "log4j": {
+    "prefix": "li-log4j",
+    "body": [
+      "log4j {",
+      "}"
+
+    ],
+    "description": "Logstash log4j Input"
+  },
+  "lumberjack": {
+    "prefix": "li-lumberjack",
+    "body": [
+      "lumberjack {",
+      "\tport => ${port}",
+      "\tssl_certificate => \"${ssl_certificate}\"",
+      "\tssl_key => \"${ssl_key}\"",
+      "}"
+
+    ],
+    "description": "Logstash lumberjack Input"
+  },
+  "meetup": {
+    "prefix": "li-meetup",
+    "body": [
+      "meetup {",
+      "\tinterval => ${interval}",
+      "\tmeetupkey => \"${meetupkey}\"",
+      "}"
+
+    ],
+    "description": "Logstash meetup Input"
+  },
+  "pipe": {
+    "prefix": "li-pipe",
+    "body": [
+      "pipe {",
+      "\tcommand => \"${command}\"",
+      "}"
+
+    ],
+    "description": "Logstash pipe Input"
+  },
+  "puppet_facter": {
+    "prefix": "li-puppet_facter",
+    "body": [
+      "puppet_facter {",
+      "}"
+
+    ],
+    "description": "Logstash puppet_facter Input"
+  },
+  "rabbitmq": {
+    "prefix": "li-rabbitmq",
+    "body": [
+      "rabbitmq {",
+      "\thost=> \"${host}\"",
+      "\tsubscription_retry_interval_seconds => ${subscription_retry_interval_seconds}",
+      "}"
+
+    ],
+    "description": "Logstash rabbitmq Input"
+  },
+  "rackspace": {
+    "prefix": "li-rackspace",
+    "body": [
+      "rackspace {",
+      "\tapi_key => \"${api_key}\"",
+      "\tusername => \"${username}\"",
+      "}"
+
+    ],
+    "description": "Logstash rackspace Input"
+  },
+  "redis": {
+    "prefix": "li-redis",
+    "body": [
+      "redis {",
+      "\tdata_type => \"${data_type}\"",
+      "\tkey => \"${key}\"",
+      "}"
+
+    ],
+    "description": "Logstash redis Input"
+  },
+  "relp": {
+    "prefix": "li-relp",
+    "body": [
+      "relp {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash relp Input"
+  },
+  "rss": {
+    "prefix": "li-rss",
+    "body": [
+      "rss {",
+      "\tinterval => \"${interval}\"",
+      "\turl => \"${url}\"",
+      "}"
+
+    ],
+    "description": "Logstash rss Input"
+  },
+  "s3": {
+    "prefix": "li-s3",
+    "body": [
+      "s3 {",
+      "\tbucket => \"${bucket}\"",
+      "}"
+
+    ],
+    "description": "Logstash s3 Input"
+  },
+  "salesforce": {
+    "prefix": "li-salesforce",
+    "body": [
+      "salesforce {",
+      "\tusername => \"${username}\"",
+      "\tpassword => \"${password}\"",
+      "\tsfdc_object_name => \"${sfdc_object_name}\"",
+      "\tsecurity_token => \"${security_token}\"",
+      "\tclient_id => \"${client_id}\"",
+      "\tclient_secret => \"${client_secret}\"",
+      "}"
+
+    ],
+    "description": "Logstash salesforce Input"
+  },
+  "snmptrap": {
+    "prefix": "li-snmptrap",
+    "body": [
+      "snmptrap {",
+      "}"
+
+    ],
+    "description": "Logstash snmptrap Input"
+  },
+  "sqlite": {
+    "prefix": "li-sqlite",
+    "body": [
+      "sqlite {",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash sqlite Input"
+  },
+  "sqs": {
+    "prefix": "li-sqs",
+    "body": [
+      "sqs {",
+      "\tqueue => \"${queue}\"",
+      "}"
+
+    ],
+    "description": "Logstash sqs Input"
+  },
+  "stdin": {
+    "prefix": "li-stdin",
+    "body": [
+      "stdin {",
+      "}"
+
+    ],
+    "description": "Logstash stdin Input"
+  },
+  "syslog": {
+    "prefix": "li-syslog",
+    "body": [
+      "syslog {",
+      "}"
+
+    ],
+    "description": "Logstash syslog Input"
+  },
+  "stomp": {
+    "prefix": "li-stomp",
+    "body": [
+      "stomp {",
+      "\thost => \"${host}\"",
+      "\tdestination => \"${destination}\"",
+      "}"
+
+    ],
+    "description": "Logstash stomp Input"
+  },
+  "tcp": {
+    "prefix": "li-tcp",
+    "body": [
+      "tcp {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash tcp Input"
+  },
+  "twitter": {
+    "prefix": "li-twitter",
+    "body": [
+      "twitter {",
+      "\tconsumer_key => \"${consumer_key}\"",
+      "\tconsumer_secret => \"${consumer_secret}\"",
+      "\toauth_token => \"${oauth_token}\"",
+      "\toauth_token_secret => \"${oauth_token_secret}\"",
+      "}"
+
+    ],
+    "description": "Logstash twitter Input"
+  },
+  "udp": {
+    "prefix": "li-udp",
+    "body": [
+      "udp {",
+      "\tport => ${port}",
+      "}"
+
+    ],
+    "description": "Logstash udp Input"
+  },
+  "unix": {
+    "prefix": "li-unix",
+    "body": [
+      "unix {",
+      "\tpath => \"${path}\"",
+      "}"
+
+    ],
+    "description": "Logstash unix Input"
+  },
+  "varnishlog": {
+    "prefix": "li-varnishlog",
+    "body": [
+      "varnishlog {",
+      "}"
+
+    ],
+    "description": "Logstash varnishlog Input"
+  },
+  "websocket": {
+    "prefix": "li-websocket",
+    "body": [
+      "websocket {",
+      "}"
+
+    ],
+    "description": "Logstash websocket Input"
+  },
+  "wmi": {
+    "prefix": "li-wmi",
+    "body": [
+      "wmi {",
+      "\tquery => \"${query}\"",
+      "}"
+
+    ],
+    "description": "Logstash wmi Input"
+  },
+  "xmpp": {
+    "prefix": "li-xmpp",
+    "body": [
+      "xmpp {",
+      "\tuser => \"${user}\"",
+      "\tpassword => \"${password}\"",
+      "}"
+
+    ],
+    "description": "Logstash xmpp Input"
+  },
+  "zenoss": {
+    "prefix": "li-zenoss",
+    "body": [
+      "zenoss {",
+      "}"
+
+    ],
+    "description": "Logstash zenoss Input"
+  },
+  "zeromq": {
+    "prefix": "li-zeromq",
+    "body": [
+      "zeromq {",
+      "\ttopology => \"${topology}\"",
+      "}"
+
+    ],
+    "description": "Logstash zeromq Input"
+  }
+}
