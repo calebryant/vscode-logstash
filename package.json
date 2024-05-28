@@ -20,7 +20,7 @@
         "languages": [{
             "id": "logstash",
             "aliases": ["Logstash", "logstash"],
-            "extensions": ["*parser.conf"]
+            "extensions": ["parser.conf"]
         }],
         "snippets": [
             {
