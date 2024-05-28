@@ -20,17 +20,9 @@
         "languages": [{
             "id": "logstash",
             "aliases": ["Logstash", "logstash"],
-            "extensions": [".logstash.conf"]
+            "extensions": ["*parser.conf"]
         }],
         "snippets": [
-            {
-                "language": "logstash",
-                "path": "./snippets/logstash-inputs.json"
-            },
-            {
-                "language": "logstash",
-                "path": "./snippets/logstash-outputs.json"
-            },
             {
                 "language": "logstash",
                 "path": "./snippets/logstash-filters.json"
