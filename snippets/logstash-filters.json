@@ -1,416 +1,722 @@
 {
-  "filter": {
-    "prefix": "lf",
-    "body": [
-      "filter {",
-      "",
-      "}"
+	"change label": {
+		"prefix": "change label",
+		"body": [
+			"# <mssp-edit: ${1:change notes}>",
+			"$2",
+			"# </mssp-edit>"
+		],
+		"description": "Change the value of a field."
+	},
+	"new parser": {
+		"prefix": "new parser",
+		"body": [
+			"# Product: ${1:data_type_name}",
+			"# Data Label: ${2:DATA_LABEL}",
+			"# Created: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE - ${3:author}",
+			"# Last Updated: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE - ${3:author}",
+			"",
+			"filter {",
+			"  $0",
+			"}",
+		]
+	},
+	"grok": {
+		"prefix": "grok",
+		"body": [
+			"# Match $1 on pattern list",
+			"grok {",
+			"  match => {",
+			"    \"${1:source}\" => [",
+			"      \"^${2:grok_pattern}$\"",
+			"    ]",
+			"  }",
+			"  overwrite => [  ]",
+			"  on_error => \"z_error.grok.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Use predefined patterns and regular expressions to match log messages, and extract values from the log message into tokens. Regular expression syntax for parsers uses two slashes instead of the single slash for typical regex pattern matches. The overwrite option used with the Grok syntax allows you to overwrite a field that already exists."
+	},
+	"json": {
+		"prefix": "json",
+		"body": [
+			"# Apply json filter to $1, put result in $2",
+			"json {",
+			"  source => \"${1:source}\"",
+			"  array_function => \"split_columns\"",
+			"  target => \"${2:target}\"",
+			"  on_error => \"z_error.json.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Extract a JSON object into tokens."
+	},
+	"xml": {
+		"prefix": "xml",
+		"body": [
+			"# Apply xml filter to $1",
+			"xml {",
+			"  source => \"${1:source}\"",
+			"  xpath => {",
+			"    \"${3:source_path}\" => \"${4:destination}\"",
+			"  }",
+			"  on_error => \"z_error.xml.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Define the path to the field in the original log using XPath expression syntax."
+	},
+	"kv": {
+		"prefix": "kv",
+		"body": [
+			"# Apply kv filter to $1, put result in $4",
+			"kv {",
+			"  # required fields",
+			"  source => \"${1:source}\"",
+			"  field_split => \"${2:field_split}\"",
+			"  value_split => \"${3:value_split}\"",
+			"  target => \"${4:target}\"",
+			"  on_error => \"z_error.kv.$RANDOM$RANDOM\"",
+			"  # optional fields",
+			"  # unescape_field_split => true   # Default is false, set to true if field_split contains escaped characters",
+			"  # unescape_value_split => true   # Default is false, set to true if value_split contains escaped characters",
+			"  # whitespace => \"strict\"       # Default is lenient, set to strict if whitespace should not be ignored",
+			"  # trim_value => \"\"         # To remove extraneous characters from the value",
+			"}$0",
+		],
+		"description": "Extract key value formatted logs. Additional function config options: whitespace, trim_value"
+	},
+	"csv": {
+		"prefix": "csv",
+		"body": [
+			"# Apply csv filter to $1 using $2 as the separator, put result in $3",
+			"csv {",
+			"  source => \"${1:source}\"",
+			"  separator => \"${2:separator}\"",
+			"  # unescape_separator => true",
+			"  target => \"${3:target}\"",
+			"  on_error => \"z_error.csv.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Extract a CSV message into tokens."
+	},
+	// mutate filters
+	"convert": {
+		"prefix": "mutate convert",
+		"body": [
+			"# Convert $1 to type $2",
+			"mutate {",
+			"  convert => {",
+			"    \"${1:source}\" => \"${2|boolean,float,hash,integer,ipaddress,macaddress,string,uinteger,hextodec,hextoascii|}\"",
+			"  }",
+			"  on_error => \"z_error.convert.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Convert the source to a new type"
+	},
+	"gsub": {
+		"prefix": "mutate gsub",
+		"body": [
+			"# Change $2 into $3 in $1",
+			"mutate {",
+			"  gsub => [ \"${1:source}\", '${2:orgvalue}','${3:newvalue}' ]",
+			"}$0",
+		],
+		"description": "Modify a value within a field."
+	},
+	"lowercase": {
+		"prefix": "mutate lowercase",
+		"body": [
+			"# Change $1 to lowercase",
+			"mutate {",
+			"  lowercase => [ \"${1:source}\" ]",
+			"}$0",
+		],
+		"description": "Change string field to lowercase."
+	},
+	"merge": {
+		"prefix": "mutate merge",
+		"body": [
+			"# Merge $4 into ${1/event[.]idm[.]read_only_udm[.](.*)//} array",
+			"mutate {",
+			"  merge => {",
+			"    \"${1:z_event.${2|about,additional,extensions,intermediary,metadata,network,observer,principal,security_result,src,target|}$3}\" => \"${4:source}\"",
+			"  }",
+			"  on_error => \"z_error.merge.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "The merge function is used to join multiple fields into an array."
+	},
+	"rename": {
+		"prefix": "mutate rename",
+		"body": [
+			"# Rename $4 to ${1/event[.]idm[.]read_only_udm[.](.*)//}",
+			"mutate {",
+			"  rename => {",
+			"    \"${4:source}\" => \"${1:z_event.${2|about,additional,extensions,intermediary,metadata,network,observer,principal,security_result,src,target|}$3}\"",
+			"  }",
+			"  on_error => \"z_error.rename.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Renames the source token name to the destination token name. The original token and new token must be of the same data type before performing the rename transformation. By using the rename function, the original token is destroyed and replaced with the new token. Errors if the destination token already exists.",
+	},
+	"replace": {
+		"prefix": "mutate replace",
+		"body": [
+			"# Set ${1/event[.]idm[.]read_only_udm[.](.*)//} with right-hand string",
+			"mutate {",
+			"  replace => {",
+			"    \"${1:z_event.${2|about,additional,extensions,intermediary,metadata,network,observer,principal,security_result,src,target|}$3}\" => \"%{${4:source}}\"",
+			"  }",
+			"  on_error => \"z_error.replace.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "This function can only be used for string values. Errors if the variable value does not exist in the state data."
+	},
+	"uppercase": {
+		"prefix": "mutate uppercase",
+		"body": [
+			"# Change $1 to uppercase",
+			"mutate {",
+			"  uppercase => [ \"timezone\" ]",
+			"}$0",
+		],
+		"description": "Change string field to uppercase."
+	},
+	"remove_field": {
+		"prefix": "mutate remove_field",
+		"body": [
+			"# Remove $1 from statedata",
+			"mutate {",
+			"  remove_field => [ \"timezone\" ]",
+			"}$0",
+		],
+		"description": "Remove field from state data. No action is performed if the token doesn't exist."
+	},
+	"copy": {
+		"prefix": "mutate copy",
+		"body": [
+			"# Copy $4 into ${1/event[.]idm[.]read_only_udm[.](.*)//}",
+			"mutate {",
+			"  copy => {",
+			"    \"${1:z_event.${2|about,additional,extensions,intermediary,metadata,network,observer,principal,security_result,src,target|}$3}\" => \"${4:source}\"",
+			"  }",
+			"  on_error => \"z_error.copy.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Copies the value of source token into destination token. There is no restriction on type of value that can be copied. If the destination token does not exist, a new token is created otherwise the value of old token is overridden."
+	},
+	"split": {
+		"prefix": "mutate split",
+		"body": [
+			"# Split $1 at each $2 character, put resulting array into $3",
+			"mutate {",
+			"  split => {",
+			"    source => \"${1:source}\"",
+			"    separator => \"${2:separator}\"",
+			"    target => \"${3:target}\"",
+			"  }",
+			"  on_error => \"z_error.split.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "The split function splits a string into an iterable array. If no separator character is found, the source field value is placed into the target field as single index array."
+	},
+	"base64": {
+		"prefix": "base64",
+		"body": [
+			"# Decode $1 into $2",
+			"base64 {",
+			"  source => \"${1:source}\"",
+			"  target => \"${2:target}\"",
+			"  encoding => \"${3|Standard,URL|}\"",
+			"}$0",
+		],
+		"description": "The base64 function converts a base64 encoded value to a string. By default, the function uses Standard decoding, but can be configured to use URL decoding."
+	},
+	"drop": {
+		"prefix": "drop",
+		"body": [
+			"drop { tag => \"${1|TAG_UNSPECIFIED,TAG_UNSUPPORTED,TAG_MALFORMED_ENCODING,TAG_MALFORMED_MESSAGE,TAG_NO_SECURITY_VALUE|}\" }$0",
+		],
+		"description": "The base64 function converts a base64 encoded value to a string. By default, the function uses Standard decoding, but can be configured to use URL decoding."
+	},
+	"date": {
+		"prefix": "date",
+		"body": [
+			"# set event_timestamp using ${1:source}",
+			"date {",
+			"  match => [",
+			"    # Source field",
+			"    \"${1:source}\"",
+			"    # Patterns to match",
+			"    \"UNIX_MS\"",
+			"    \"UNIX\"",
+			"    \"ISO8601\"",
+			"    \"RFC3399\"",
+			"    \"MM dd HH:mm:ss\"",
+			"    \"MM  d HH:mm:ss\"",
+			"    \"MMM dd HH:mm:ss\"",
+			"    \"MMM  d HH:mm:ss\"",
+			"  ]",
+			"  rebase => true",
+			"  timezone => \"${2|UTC,Etc/GMT+12,Etc/GMT+11,Pacific/Apia,Pacific/Midway,Pacific/Niue,Pacific/Pago_Pago,America/Adak,Etc/GMT+10,HST,Pacific/Fakaofo,Pacific/Honolulu,Pacific/Johnston,Pacific/Rarotonga,Pacific/Tahiti,Pacific/Marquesas,America/Anchorage,America/Juneau,America/Nome,America/Yakutat,Etc/GMT+9,Pacific/Gambier,America/Dawson,America/Los_Angeles,America/Santa_Isabel,America/Tijuana,America/Vancouver,America/Whitehorse,Etc/GMT+8,PST8PDT,Pacific/Pitcairn,America/Boise,America/Cambridge_Bay,America/Chihuahua,America/Dawson_Creek,America/Denver,America/Edmonton,America/Hermosillo,America/Inuvik,America/Mazatlan,America/Ojinaga,America/Phoenix,America/Yellowknife,Etc/GMT+7,MST,MST7MDT,America/Bahia_Banderas,America/Belize,America/Cancun,America/Chicago,America/Costa_Rica,America/El_Salvador,America/Guatemala,America/Indiana/Knox,America/Indiana/Tell_City,America/Managua,America/Matamoros,America/Menominee,America/Merida,America/Mexico_City,America/Monterrey,America/North_Dakota/Center,America/North_Dakota/New_Salem,America/Rainy_River,America/Rankin_Inlet,America/Regina,America/Swift_Current,America/Tegucigalpa,America/Winnipeg,CST6CDT,Etc/GMT+6,Pacific/Easter,Pacific/Galapagos,America/Atikokan,America/Bogota,America/Cayman,America/Detroit,America/Grand_Turk,America/Guayaquil,America/Havana,America/Indiana/Indianapolis,America/Indiana/Marengo,America/Indiana/Petersburg,America/Indiana/Vevay,America/Indiana/Vincennes,America/Indiana/Winamac,America/Iqaluit,America/Jamaica,America/Kentucky/Louisville,America/Kentucky/Monticello,America/Lima,America/Montreal,America/Nassau,America/New_York,America/Nipigon,America/Panama,America/Pangnirtung,America/Port-au-Prince,America/Resolute,America/Thunder_Bay,America/Toronto,EST,EST5EDT,Etc/GMT+5,America/Caracas,America/Anguilla,America/Antigua,America/Argentina/San_Luis,America/Aruba,America/Asuncion,America/Barbados,America/Blanc-Sablon,America/Boa_Vista,America/Campo_Grande,America/Cuiaba,America/Curacao,America/Dominica,America/Eirunepe,America/Glace_Bay,America/Goose_Bay,America/Grenada,America/Guadeloupe,America/Guyana,America/Halifax,America/La_Paz,America/Manaus,America/Martinique,America/Moncton,America/Montserrat,America/Port_of_Spain,America/Porto_Velho,America/Puerto_Rico,America/Rio_Branco,America/Santiago,America/Santo_Domingo,America/St_Kitts,America/St_Lucia,America/St_Thomas,America/St_Vincent,America/Thule,America/Tortola,Antarctica/Palmer,Atlantic/Bermuda,Atlantic/Stanley,Etc/GMT+4,America/St_Johns,America/Araguaina,America/Argentina/Buenos_Aires,America/Argentina/Catamarca,America/Argentina/Cordoba,America/Argentina/Jujuy,America/Argentina/La_Rioja,America/Argentina/Mendoza,America/Argentina/Rio_Gallegos,America/Argentina/Salta,America/Argentina/San_Juan,America/Argentina/Tucuman,America/Argentina/Ushuaia,America/Bahia,America/Belem,America/Cayenne,America/Fortaleza,America/Godthab,America/Maceio,America/Miquelon,America/Montevideo,America/Paramaribo,America/Recife,America/Santarem,America/Sao_Paulo,Antarctica/Rothera,Etc/GMT+3,America/Noronha,Atlantic/South_Georgia,Etc/GMT+2,America/Scoresbysund,Atlantic/Azores,Atlantic/Cape_Verde,Etc/GMT+1,Africa/Abidjan,Africa/Accra,Africa/Bamako,Africa/Banjul,Africa/Bissau,Africa/Casablanca,Africa/Conakry,Africa/Dakar,Africa/El_Aaiun,Africa/Freetown,Africa/Lome,Africa/Monrovia,Africa/Nouakchott,Africa/Ouagadougou,Africa/Sao_Tome,America/Danmarkshavn,Atlantic/Canary,Atlantic/Faroe,Atlantic/Madeira,Atlantic/Reykjavik,Atlantic/St_Helena,Etc/GMT,Etc/UCT,Etc/UTC,Europe/Dublin,Europe/Lisbon,Europe/London,WET,Africa/Algiers,Africa/Bangui,Africa/Brazzaville,Africa/Ceuta,Africa/Douala,Africa/Kinshasa,Africa/Lagos,Africa/Libreville,Africa/Luanda,Africa/Malabo,Africa/Ndjamena,Africa/Niamey,Africa/Porto-Novo,Africa/Tunis,Africa/Windhoek,CET,Etc/GMT-1,Europe/Amsterdam,Europe/Andorra,Europe/Belgrade,Europe/Berlin,Europe/Brussels,Europe/Budapest,Europe/Copenhagen,Europe/Gibraltar,Europe/Luxembourg,Europe/Madrid,Europe/Malta,Europe/Monaco,Europe/Oslo,Europe/Paris,Europe/Prague,Europe/Rome,Europe/Stockholm,Europe/Tirane,Europe/Vaduz,Europe/Vienna,Europe/Warsaw,Europe/Zurich,MET,Africa/Blantyre,Africa/Bujumbura,Africa/Cairo,Africa/Gaborone,Africa/Harare,Africa/Johannesburg,Africa/Kigali,Africa/Lubumbashi,Africa/Lusaka,Africa/Maputo,Africa/Maseru,Africa/Mbabane,Africa/Tripoli,Asia/Amman,Asia/Beirut,Asia/Damascus,Asia/Gaza,Asia/Jerusalem,Asia/Nicosia,EET,Etc/GMT-2,Europe/Athens,Europe/Bucharest,Europe/Chisinau,Europe/Helsinki,Europe/Istanbul,Europe/Kaliningrad,Europe/Kiev,Europe/Minsk,Europe/Riga,Europe/Simferopol,Europe/Sofia,Europe/Tallinn,Europe/Uzhgorod,Europe/Vilnius,Europe/Zaporozhye,Africa/Addis_Ababa,Africa/Asmara,Africa/Dar_es_Salaam,Africa/Djibouti,Africa/Kampala,Africa/Khartoum,Africa/Mogadishu,Africa/Nairobi,Antarctica/Syowa,Asia/Aden,Asia/Baghdad,Asia/Bahrain,Asia/Kuwait,Asia/Qatar,Asia/Riyadh,Etc/GMT-3,Europe/Moscow,Europe/Samara,Europe/Volgograd,Indian/Antananarivo,Indian/Comoro,Indian/Mayotte,Asia/Tehran,Asia/Baku,Asia/Dubai,Asia/Muscat,Asia/Tbilisi,Asia/Yerevan,Etc/GMT-4,Indian/Mahe,Indian/Mauritius,Indian/Reunion,Asia/Kabul,Antarctica/Mawson,Asia/Aqtau,Asia/Aqtobe,Asia/Ashgabat,Asia/Dushanbe,Asia/Karachi,Asia/Oral,Asia/Samarkand,Asia/Tashkent,Asia/Yekaterinburg,Etc/GMT-5,Indian/Kerguelen,Indian/Maldives,Asia/Colombo,Asia/Kolkata,Asia/Kathmandu,Antarctica/Vostok,Asia/Almaty,Asia/Bishkek,Asia/Dhaka,Asia/Novokuznetsk,Asia/Novosibirsk,Asia/Omsk,Asia/Qyzylorda,Asia/Thimphu,Etc/GMT-6,Indian/Chagos,Asia/Rangoon,Indian/Cocos,Antarctica/Davis,Asia/Bangkok,Asia/Ho_Chi_Minh,Asia/Hovd,Asia/Jakarta,Asia/Krasnoyarsk,Asia/Phnom_Penh,Asia/Pontianak,Asia/Vientiane,Etc/GMT-7,Indian/Christmas,Antarctica/Casey,Asia/Brunei,Asia/Choibalsan,Asia/Chongqing,Asia/Harbin,Asia/Hong_Kong,Asia/Irkutsk,Asia/Kashgar,Asia/Kuala_Lumpur,Asia/Kuching,Asia/Macau,Asia/Makassar,Asia/Manila,Asia/Shanghai,Asia/Singapore,Asia/Taipei,Asia/Ulaanbaatar,Asia/Urumqi,Australia/Perth,Etc/GMT-8,Australia/Eucla,Asia/Dili,Asia/Jayapura,Asia/Pyongyang,Asia/Seoul,Asia/Tokyo,Asia/Yakutsk,Etc/GMT-9,Pacific/Palau,Australia/Adelaide,Australia/Broken_Hill,Australia/Darwin,Antarctica/DumontDUrville,Asia/Sakhalin,Asia/Vladivostok,Australia/Brisbane,Australia/Currie,Australia/Hobart,Australia/Lindeman,Australia/Melbourne,Australia/Sydney,Etc/GMT-10,Pacific/Chuuk,Pacific/Guam,Pacific/Port_Moresby,Pacific/Saipan,Australia/Lord_Howe,Antarctica/Macquarie,Asia/Anadyr,Asia/Kamchatka,Asia/Magadan,Etc/GMT-11,Pacific/Efate,Pacific/Guadalcanal,Pacific/Kosrae,Pacific/Noumea,Pacific/Pohnpei,Pacific/Norfolk,Antarctica/McMurdo,Etc/GMT-12,Pacific/Auckland,Pacific/Fiji,Pacific/Funafuti,Pacific/Kwajalein,Pacific/Majuro,Pacific/Nauru,Pacific/Tarawa,Pacific/Wake,Pacific/Wallis,Pacific/Chatham,Etc/GMT-13,Pacific/Enderbury,Pacific/Tongatapu,Etc/GMT-14,Pacific/Kiritimati|}\"",
+			"  on_error => \"z_error.date.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "The date function is required to handle the date and timestamp from the log extraction."
+	},
+	"statedump": {
+		"prefix": "statedump",
+		"body": [
+			"statedump { label => \"line_$TM_LINE_NUMBER\" }$0"
+		],
+		"description": "Statedump shortcut."
+	},
+	"output event": {
+		"prefix": "event",
+		"body": [
+			"z_event.${1|about,additional,extensions,intermediary,metadata,network,observer,principal,security_result,src,target|}.$3"
+		],
+		"description": "Shortcut to UDM output field."
+	},
+	"on_error": {
+		"prefix": "on_error",
+		"body": [
+			"on_error => \"z_error.generic.$RANDOM$RANDOM\""
+		],
+		"description": "On error statement"
+	},
 
-    ],
-    "description": "Logstash Filter"
-  },
-  "aggregate": {
-    "prefix": "lf-aggregate",
-    "body": [
-      "aggregate {",
-      "\tcode => \"${code}\"",
-      "\ttask_id => \"${task_id}\"",
-      "}"
-    ],
-    "description": "Logstash aggregate Filter"
-  },
-  "alter": {
-    "prefix": "lf-alter",
-    "body": [
-      "alter {",
-      "}"
-    ],
-    "description": "Logstash alter Filter"
-  },
-  "anonymize": {
-    "prefix": "lf-anonymize",
-    "body": [
-      "anonymize {",
-      "\talgorithm => \"${algorithm}\"",
-      "\tkey => \"${key}\"",
-      "\tfields => [\"${field}\"]",
-      "}"
-    ],
-    "description": "Logstash anonymize Filter"
-  },
-  "cidr": {
-    "prefix": "lf-cidr",
-    "body": [
-      "cidr {",
-      "}"
-    ],
-    "description": "Logstash cidr Filter"
-  },
-  "cipher": {
-    "prefix": "lf-cipher",
-    "body": [
-      "cipher {",
-      "\talgorithm => \"${algorithm}\"",
-      "\tmode => \"${mode}\"",
-      "}"
-    ],
-    "description": "Logstash cipher Filter"
-  },
-  "clone": {
-    "prefix": "lf-clone",
-    "body": [
-      "clone {",
-      "}"
-    ],
-    "description": "Logstash clone Filter"
-  },
-  "collate": {
-    "prefix": "lf-collate",
-    "body": [
-      "collate {",
-      "}"
-    ],
-    "description": "Logstash collate Filter"
-  },
-  "csv": {
-    "prefix": "lf-csv",
-    "body": [
-      "csv {",
-      "}"
-    ],
-    "description": "Logstash csv Filter"
-  },
-  "date": {
-    "prefix": "lf-date",
-    "body": [
-      "date {",
-      "\tmatch => [\"${date}\", \"${format}\"]",
-      "}"
-    ],
-    "description": "Logstash date Filter"
-  },
-  "de_dot": {
-    "prefix": "lf-de_dot",
-    "body": [
-      "de_dot {",
-      "}"
-    ],
-    "description": "Logstash de_dot Filter"
-  },
-  "dissect": {
-    "prefix": "lf-dissect",
-    "body": [
-      "dissect {",
-      "}"
-    ],
-    "description": "Logstash dissect Filter"
-  },
-  "dns": {
-    "prefix": "lf-dns",
-    "body": [
-      "dns {",
-      "}"
-    ],
-    "description": "Logstash dns Filter"
-  },
-  "drop": {
-    "prefix": "lf-drop",
-    "body": [
-      "drop {",
-      "}"
-    ],
-    "description": "Logstash drop Filter"
-  },
-  "elapsed": {
-    "prefix": "lf-elapsed",
-    "body": [
-      "elapsed {",
-      "\tstart_tag => \"${start_tag}\"",
-      "\tend_tag => \"${end_tag}\"",
-      "\tunique_id_field => \"${unique_id_field}\"",
-      "}"
-    ],
-    "description": "Logstash elapsed Filter"
-  },
-  "elasticsearch": {
-    "prefix": "lf-elasticsearch",
-    "body": [
-      "elasticsearch {",
-      "}"
-    ],
-    "description": "Logstash elasticsearch Filter"
-  },
-  "environment": {
-    "prefix": "lf-environment",
-    "body": [
-      "environment {",
-      "}"
-    ],
-    "description": "Logstash environment Filter"
-  },
-  "extractnumbers": {
-    "prefix": "lf-extractnumbers",
-    "body": [
-      "extractnumbers {",
-      "}"
-    ],
-    "description": "Logstash extractnumbers Filter"
-  },
-  "fingerprint": {
-    "prefix": "lf-fingerprint",
-    "body": [
-      "fingerprint {",
-      "\tmethod => \"${method}\"",
-      "}"
-    ],
-    "description": "Logstash fingerprint Filter"
-  },
-  "geoip": {
-    "prefix": "lf-geoip",
-    "body": [
-      "geoip {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash geoip Filter"
-  },
-  "grok": {
-    "prefix": "lf-grok",
-    "body": [
-      "grok {",
-      "\tmatch => { \"${field}\" => \"${pattern\"}",
-      "}"
-    ],
-    "description": "Logstash grok Filter"
-  },
-  "i18n": {
-    "prefix": "lf-i18n",
-    "body": [
-      "i18n {",
-      "}"
-    ],
-    "description": "Logstash i18n Filter"
-  },
-  "json": {
-    "prefix": "lf-json",
-    "body": [
-      "json {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash json Filter"
-  },
-  "json_encode": {
-    "prefix": "lf-json_encode",
-    "body": [
-      "json_encode {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash json_encode Filter"
-  },
-  "kv": {
-    "prefix": "lf-kv",
-    "body": [
-      "kv {",
-      "}"
-    ],
-    "description": "Logstash kv Filter"
-  },
-  "metaevent": {
-    "prefix": "lf-metaevent",
-    "body": [
-      "metaevent {",
-      "\tfollowed_by_tags => [\"${tag}\"]",
-      "}"
-    ],
-    "description": "Logstash metaevent Filter"
-  },
-  "metricize": {
-    "prefix": "lf-metricize",
-    "body": [
-      "metricize {",
-      "\tmetrics => [\"${metric}\"]",
-      "}"
-    ],
-    "description": "Logstash metricize Filter"
-  },
-  "metrics": {
-    "prefix": "lf-metrics",
-    "body": [
-      "metrics {",
-      "}"
-    ],
-    "description": "Logstash metrics Filter"
-  },
-  "multiline": {
-    "prefix": "lf-multiline",
-    "body": [
-      "multiline {",
-      "\tpattern => \"${pattern}\"",
-      "\twhat => \"${what}\"",
-      "}"
-    ],
-    "description": "Logstash multiline Filter"
-  },
-  "mutate": {
-    "prefix": "lf-mutate",
-    "body": [
-      "mutate {",
-      "}"
-    ],
-    "description": "Logstash mutate Filter"
-  },
-  "oui": {
-    "prefix": "lf-oui",
-    "body": [
-      "oui {",
-      "}"
-    ],
-    "description": "Logstash oui Filter"
-  },
-  "prune": {
-    "prefix": "lf-prune",
-    "body": [
-      "prune {",
-      "}"
-    ],
-    "description": "Logstash prune Filter"
-  },
-  "punct": {
-    "prefix": "lf-punct",
-    "body": [
-      "punct {",
-      "}"
-    ],
-    "description": "Logstash punct Filter"
-  },
-  "range": {
-    "prefix": "lf-range",
-    "body": [
-      "range {",
-      "}"
-    ],
-    "description": "Logstash range Filter"
-  },
-  "ruby": {
-    "prefix": "lf-ruby",
-    "body": [
-      "ruby {",
-      "\tcode => \"${code}\"",
-      "}"
-    ],
-    "description": "Logstash ruby Filter"
-  },
-  "sleep": {
-    "prefix": "lf-sleep",
-    "body": [
-      "sleep {",
-      "}"
-    ],
-    "description": "Logstash sleep Filter"
-  },
-  "split": {
-    "prefix": "lf-split",
-    "body": [
-      "split {",
-      "}"
-    ],
-    "description": "Logstash split Filter"
-  },
-  "syslog_pri": {
-    "prefix": "lf-syslog_pri",
-    "body": [
-      "syslog_pri {",
-      "}"
-    ],
-    "description": "Logstash syslog_pri Filter"
-  },
-  "throttle": {
-    "prefix": "lf-throttle",
-    "body": [
-      "throttle {",
-      "\tkey => \"${key}\"",
-      "}"
-    ],
-    "description": "Logstash throttle Filter"
-  },
-  "tld": {
-    "prefix": "lf-tld",
-    "body": [
-      "tld {",
-      "}"
-    ],
-    "description": "Logstash tld Filter"
-  },
-  "translate": {
-    "prefix": "lf-translate",
-    "body": [
-      "translate {",
-      "\tfield => \"${field}\"",
-      "}"
-    ],
-    "description": "Logstash translate Filter"
-  },
-  "truncate": {
-    "prefix": "lf-truncate",
-    "body": [
-      "truncate {",
-      "\tlength_bytes => ${length_bytes}",
-      "}"
-    ],
-    "description": "Logstash truncate Filter"
-  },
-  "urldecode": {
-    "prefix": "lf-urldecode",
-    "body": [
-      "urldecode {",
-      "}"
-    ],
-    "description": "Logstash urldecode Filter"
-  },
-  "useragent": {
-    "prefix": "lf-useragent",
-    "body": [
-      "useragent {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash useragent Filter"
-  },
-  "uuid": {
-    "prefix": "lf-uuid",
-    "body": [
-      "uuid {",
-      "\ttarget => \"${target}\"",
-      "}"
-    ],
-    "description": "Logstash uuid Filter"
-  },
-  "xml": {
-    "prefix": "lf-xml",
-    "body": [
-      "xml {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash xml Filter"
-  },
-  "yaml": {
-    "prefix": "lf-yaml",
-    "body": [
-      "yaml {",
-      "\tsource => \"${source}\"",
-      "}"
-    ],
-    "description": "Logstash yaml Filter"
-  },
-  "zeromq": {
-    "prefix": "lf-zeromq",
-    "body": [
-      "zeromq {",
-      "}"
-    ],
-    "description": "Logstash zeromq Filter"
-  }
+	// Code logic snippets
+
+	"Event type validation": {
+		"prefix": "new parser",
+		"body": [
+			"#################################",
+			"## BEGIN event_type validation ##",
+			"#################################",
+			"mutate {",
+			"  replace => {\"z_error.invalid_event_type\" => \"false\"}",
+			"  convert => {\"z_error.invalid_event_type\" => \"boolean\"}",
+			"}",
+			"if [event][idm][read_only_udm][metadata][event_type] == \"GENERIC_EVENT\" {} # do nothing",
+			"else if [event][idm][read_only_udm][metadata][event_type] in [\"NETWORK_CONNECTION\", \"NETWORK_HTTP\"] { mutate { copy => { \"z_event.principal\" => \"z_event.principal\" \"z_event.target\" => \"z_event.target\" } on_error => \"z_error.invalid_event_type\" } }",
+			"else if [event][idm][read_only_udm][metadata][event_type] in [\"FILE_CREATION\", \"FILE_DELETION\", \"FILE_MODIFICATION\", \"FILE_READ\", \"FILE_OPEN\"] { mutate { copy => { \"z_event.principal\" => \"z_event.principal\" \"z_event.target.file\" => \"z_event.target.file\" } on_error => \"z_error.invalid_event_type\" } }",
+			"if [z_error][invalid_event_type] {",
+			"  mutate {",
+			"    replace => {",
+			"      \"z_event.metadata.event_type\" => \"GENERIC_EVENT\"",
+			"    }",
+			"  }",
+			"}"
+		],
+		"description": "Validates required fields for the event type is set. Still a work in progress."
+	},
+	"Logic: timezone": {
+		"prefix": "format timezone",
+		"body": [
+			"### Begin timezone handling logic ###",
+			"mutate { copy => { \"timezone\" => \"${1:timezone}\" } on_error => \"z_error.replace.timezone_does_not_exist\" }",
+			"if ![z_error][replace][timezone_does_not_exist] {",
+			"  if [timezone] == \"Europe/Paris\" { mutate { gsub => [\"timezone\", \"Europe/Paris\", \"+0100\"] } }",
+			"  else if [timezone] =~ \"CET\" { mutate { gsub => [\"timezone\", \"CET\", \"+0100\"] } }",
+			"  else if [timezone] =~ \"MET\" { mutate { gsub => [\"timezone\", \"MET\", \"+0100\"] } }",
+			"  else if [timezone] =~ \"DST\" { mutate { gsub => [\"timezone\", \"DST\", \"+0100\"] } }",
+			"  else if [timezone] =~ \"EDT\" { mutate { gsub => [\"timezone\", \"EDT\", \"-0400\"] } }",
+			"  else if [timezone] =~ \"EST\" { mutate { gsub => [\"timezone\", \"EST\", \"-0500\"] } }",
+			"  else if [timezone] =~ \"CST\" { mutate { gsub => [\"timezone\", \"CST\", \"-0600\"] } }",
+			"  else if [timezone] =~ \"CDT\" { mutate { gsub => [\"timezone\", \"CDT\", \"-0500\"] } }",
+			"  else if [timezone] =~ \"MST\" { mutate { gsub => [\"timezone\", \"MST\", \"-0700\"] } }",
+			"  else if [timezone] =~ \"MDT\" { mutate { gsub => [\"timezone\", \"MDT\", \"-0600\"] } }",
+			"  else if [timezone] =~ \"PST\" { mutate { gsub => [\"timezone\", \"PST\", \"-0800\"] } }",
+			"  else if [timezone] =~ \"PDT\" { mutate { gsub => [\"timezone\", \"PDT\", \"-0700\"] } }",
+			"  else if [timezone] =~ \"HST\" { mutate { gsub => [\"timezone\", \"HST\", \"-1000\"] } }",
+			"  else { mutate { replace => { \"timezone\" => \"+0000\" } } }",
+			"  mutate { ",
+			"    replace => { \"${2:timestamp}\" => \"%{${2:timestamp}} %{timezone}\" } ",
+			"    on_error => \"z_error.replace.$RANDOM$RANDOM\"",
+			"  }",
+			"  date {",
+			"    match => [",
+			"      \"timestamp\",",
+			"      \"MM dd HH:mm:ss Z\"",
+			"      \"MM  d HH:mm:ss Z\"",
+			"      \"MMM dd HH:mm:ss Z\"",
+			"      \"MMM  d HH:mm:ss Z\"",
+			"    ]",
+			"    rebase => true",
+			"    on_error => \"z_error.date.$RANDOM$RANDOM\"",
+			"  }",
+			"}$0",
+			"### End timezone handling logic ###",
+		]
+	},
+	"Additional Field": {
+		"prefix": "additional field",
+		"body": [
+			"# Set $1 additional field",
+			"mutate {",
+			"  # Remove additional_fields to avoid overwriting",
+			"  remove_field => [ \"additional_fields\" ]",
+			"  # Set the key and value",
+			"  replace => {",
+			"    \"additional_fields.key\" => \"${1:key}\"",
+			"    \"additional_fields.value.string_value\" => \"${2:value}\"",
+			"  }",
+			"  # Merge into UDM event",
+			"  merge => { \"z_event.additional.fields\" => \"additional_fields\" }",
+			"  on_error => \"z_error.replace.$RANDOM$RANDOM\"",
+			"}$0",
+		],
+		"description": "Logic to set the additional fields value"
+	},
+	// grok patterns
+	"USERNAME": {
+		"prefix": "grok pattern USERNAME",
+		"body": "USERNAME",
+		"description": "Grok pattern for USERNAME"
+	},
+	"USER": {
+		"prefix": "grok pattern USER",
+		"body": "USER",
+		"description": "Grok pattern for USER"
+	},
+	"INT": {
+		"prefix": "grok pattern INT",
+		"body": "INT",
+		"description": "Grok pattern for INT"
+	},
+	"BASE10NUM": {
+		"prefix": "grok pattern BASE10NUM",
+		"body": "BASE10NUM",
+		"description": "Grok pattern for BASE10NUM"
+	},
+	"NUMBER": {
+		"prefix": "grok pattern NUMBER",
+		"body": "NUMBER",
+		"description": "Grok pattern for NUMBER"
+	},
+	"BASE16NUM": {
+		"prefix": "grok pattern BASE16NUM",
+		"body": "BASE16NUM",
+		"description": "Grok pattern for BASE16NUM"
+	},
+	"BASE16FLOAT": {
+		"prefix": "grok pattern BASE16FLOAT",
+		"body": "BASE16FLOAT",
+		"description": "Grok pattern for BASE16FLOAT"
+	},
+	"POSINT": {
+		"prefix": "grok pattern POSINT",
+		"body": "POSINT",
+		"description": "Grok pattern for POSINT"
+	},
+	"NONNEGINT": {
+		"prefix": "grok pattern NONNEGINT",
+		"body": "NONNEGINT",
+		"description": "Grok pattern for NONNEGINT"
+	},
+	"WORD": {
+		"prefix": "grok pattern WORD",
+		"body": "WORD",
+		"description": "Grok pattern for WORD"
+	},
+	"NOTSPACE": {
+		"prefix": "grok pattern NOTSPACE",
+		"body": "NOTSPACE",
+		"description": "Grok pattern for NOTSPACE"
+	},
+	"SPACE": {
+		"prefix": "grok pattern SPACE",
+		"body": "SPACE",
+		"description": "Grok pattern for SPACE"
+	},
+	"DATA": {
+		"prefix": "grok pattern DATA",
+		"body": "DATA",
+		"description": "Grok pattern for DATA"
+	},
+	"GREEDYDATA": {
+		"prefix": "grok pattern GREEDYDATA",
+		"body": "GREEDYDATA",
+		"description": "Grok pattern for GREEDYDATA"
+	},
+	"QUOTEDSTRING": {
+		"prefix": "grok pattern QUOTEDSTRING",
+		"body": "QUOTEDSTRING",
+		"description": "Grok pattern for QUOTEDSTRING"
+	},
+	"UUID": {
+		"prefix": "grok pattern UUID",
+		"body": "UUID",
+		"description": "Grok pattern for UUID"
+	},
+	"MAC": {
+		"prefix": "grok pattern MAC",
+		"body": "MAC",
+		"description": "Grok pattern for MAC"
+	},
+	"CISCOMAC": {
+		"prefix": "grok pattern CISCOMAC",
+		"body": "CISCOMAC",
+		"description": "Grok pattern for CISCOMAC"
+	},
+	"WINDOWSMAC": {
+		"prefix": "grok pattern WINDOWSMAC",
+		"body": "WINDOWSMAC",
+		"description": "Grok pattern for WINDOWSMAC"
+	},
+	"COMMONMAC": {
+		"prefix": "grok pattern COMMONMAC",
+		"body": "COMMONMAC",
+		"description": "Grok pattern for COMMONMAC"
+	},
+	"IPV6": {
+		"prefix": "grok pattern IPV6",
+		"body": "IPV6",
+		"description": "Grok pattern for IPV6"
+	},
+	"IPV4": {
+		"prefix": "grok pattern IPV4",
+		"body": "IPV4",
+		"description": "Grok pattern for IPV4"
+	},
+	"IP": {
+		"prefix": "grok pattern IP",
+		"body": "IP",
+		"description": "Grok pattern for IP"
+	},
+	"HOSTNAME": {
+		"prefix": "grok pattern HOSTNAME",
+		"body": "HOSTNAME",
+		"description": "Grok pattern for HOSTNAME"
+	},
+	"HOST": {
+		"prefix": "grok pattern HOST",
+		"body": "HOST",
+		"description": "Grok pattern for HOST"
+	},
+	"IPORHOST": {
+		"prefix": "grok pattern IPORHOST",
+		"body": "IPORHOST",
+		"description": "Grok pattern for IPORHOST"
+	},
+	"HOSTPORT": {
+		"prefix": "grok pattern HOSTPORT",
+		"body": "HOSTPORT",
+		"description": "Grok pattern for HOSTPORT"
+	},
+	"PATH": {
+		"prefix": "grok pattern PATH",
+		"body": "PATH",
+		"description": "Grok pattern for PATH"
+	},
+	"UNIXPATH": {
+		"prefix": "grok pattern UNIXPATH",
+		"body": "UNIXPATH",
+		"description": "Grok pattern for UNIXPATH"
+	},
+	"TTY": {
+		"prefix": "grok pattern TTY",
+		"body": "TTY",
+		"description": "Grok pattern for TTY"
+	},
+	"WINPATH": {
+		"prefix": "grok pattern WINPATH",
+		"body": "WINPATH",
+		"description": "Grok pattern for WINPATH"
+	},
+	"URIPROTO": {
+		"prefix": "grok pattern URIPROTO",
+		"body": "URIPROTO",
+		"description": "Grok pattern for URIPROTO"
+	},
+	"URIHOST": {
+		"prefix": "grok pattern URIHOST",
+		"body": "URIHOST",
+		"description": "Grok pattern for URIHOST"
+	},
+	"URIPATH": {
+		"prefix": "grok pattern URIPATH",
+		"body": "URIPATH",
+		"description": "Grok pattern for URIPATH"
+	},
+	"URIPARAM": {
+		"prefix": "grok pattern URIPARAM",
+		"body": "URIPARAM",
+		"description": "Grok pattern for URIPARAM"
+	},
+	"URIPATHPARAM": {
+		"prefix": "grok pattern URIPATHPARAM",
+		"body": "URIPATHPARAM",
+		"description": "Grok pattern for URIPATHPARAM"
+	},
+	"URI": {
+		"prefix": "grok pattern URI",
+		"body": "URI",
+		"description": "Grok pattern for URI"
+	},
+	"MONTH": {
+		"prefix": "grok pattern MONTH",
+		"body": "MONTH",
+		"description": "Grok pattern for MONTH"
+	},
+	"MONTHNUM": {
+		"prefix": "grok pattern MONTHNUM",
+		"body": "MONTHNUM",
+		"description": "Grok pattern for MONTHNUM"
+	},
+	"MONTHNUM2": {
+		"prefix": "grok pattern MONTHNUM2",
+		"body": "MONTHNUM2",
+		"description": "Grok pattern for MONTHNUM2"
+	},
+	"MONTHDAY": {
+		"prefix": "grok pattern MONTHDAY",
+		"body": "MONTHDAY",
+		"description": "Grok pattern for MONTHDAY"
+	},
+	"DAY": {
+		"prefix": "grok pattern DAY",
+		"body": "DAY",
+		"description": "Grok pattern for DAY"
+	},
+	"YEAR": {
+		"prefix": "grok pattern YEAR",
+		"body": "YEAR",
+		"description": "Grok pattern for YEAR"
+	},
+	"HOUR": {
+		"prefix": "grok pattern HOUR",
+		"body": "HOUR",
+		"description": "Grok pattern for HOUR"
+	},
+	"MINUTE": {
+		"prefix": "grok pattern MINUTE",
+		"body": "MINUTE",
+		"description": "Grok pattern for MINUTE"
+	},
+	"SECOND": {
+		"prefix": "grok pattern SECOND",
+		"body": "SECOND",
+		"description": "Grok pattern for SECOND"
+	},
+	"TIME": {
+		"prefix": "grok pattern TIME",
+		"body": "TIME",
+		"description": "Grok pattern for TIME"
+	},
+	"DATE_US": {
+		"prefix": "grok pattern DATE_US",
+		"body": "DATE_US",
+		"description": "Grok pattern for DATE_US"
+	},
+	"DATE_EU": {
+		"prefix": "grok pattern DATE_EU",
+		"body": "DATE_EU",
+		"description": "Grok pattern for DATE_EU"
+	},
+	"ISO8601_TIMEZONE": {
+		"prefix": "grok pattern ISO8601_TIMEZONE",
+		"body": "ISO8601_TIMEZONE",
+		"description": "Grok pattern for ISO8601_TIMEZONE"
+	},
+	"ISO8601_SECOND": {
+		"prefix": "grok pattern ISO8601_SECOND",
+		"body": "ISO8601_SECOND",
+		"description": "Grok pattern for ISO8601_SECOND"
+	},
+	"TIMESTAMP_ISO8601": {
+		"prefix": "grok pattern TIMESTAMP_ISO8601",
+		"body": "TIMESTAMP_ISO8601",
+		"description": "Grok pattern for TIMESTAMP_ISO8601"
+	},
+	"DATE": {
+		"prefix": "grok pattern DATE",
+		"body": "DATE",
+		"description": "Grok pattern for DATE"
+	},
+	"DATESTAMP": {
+		"prefix": "grok pattern DATESTAMP",
+		"body": "DATESTAMP",
+		"description": "Grok pattern for DATESTAMP"
+	},
+	"TZ": {
+		"prefix": "grok pattern TZ",
+		"body": "TZ",
+		"description": "Grok pattern for TZ"
+	},
+	"DATESTAMP_RFC822": {
+		"prefix": "grok pattern DATESTAMP_RFC822",
+		"body": "DATESTAMP_RFC822",
+		"description": "Grok pattern for DATESTAMP_RFC822"
+	},
+	"DATESTAMP_RFC2822": {
+		"prefix": "grok pattern DATESTAMP_RFC2822",
+		"body": "DATESTAMP_RFC2822",
+		"description": "Grok pattern for DATESTAMP_RFC2822"
+	},
+	"DATESTAMP_OTHER": {
+		"prefix": "grok pattern DATESTAMP_OTHER",
+		"body": "DATESTAMP_OTHER",
+		"description": "Grok pattern for DATESTAMP_OTHER"
+	},
+	"DATESTAMP_EVENTLOG": {
+		"prefix": "grok pattern DATESTAMP_EVENTLOG",
+		"body": "DATESTAMP_EVENTLOG",
+		"description": "Grok pattern for DATESTAMP_EVENTLOG"
+	},
+	"SYSLOGTIMESTAMP": {
+		"prefix": "grok pattern SYSLOGTIMESTAMP",
+		"body": "SYSLOGTIMESTAMP",
+		"description": "Grok pattern for SYSLOGTIMESTAMP"
+	},
+	"PROG": {
+		"prefix": "grok pattern PROG",
+		"body": "PROG",
+		"description": "Grok pattern for PROG"
+	},
+	"SYSLOGPROG": {
+		"prefix": "grok pattern SYSLOGPROG",
+		"body": "SYSLOGPROG",
+		"description": "Grok pattern for SYSLOGPROG"
+	},
+	"SYSLOGHOST": {
+		"prefix": "grok pattern SYSLOGHOST",
+		"body": "SYSLOGHOST",
+		"description": "Grok pattern for SYSLOGHOST"
+	},
+	"SYSLOGFACILITY": {
+		"prefix": "grok pattern SYSLOGFACILITY",
+		"body": "SYSLOGFACILITY",
+		"description": "Grok pattern for SYSLOGFACILITY"
+	},
+	"HTTPDATE": {
+		"prefix": "grok pattern HTTPDATE",
+		"body": "HTTPDATE",
+		"description": "Grok pattern for HTTPDATE"
+	},
+	"QS": {
+		"prefix": "grok pattern QS",
+		"body": "QS",
+		"description": "Grok pattern for QS"
+	},
+	"SYSLOGBASE": {
+		"prefix": "grok pattern SYSLOGBASE",
+		"body": "SYSLOGBASE",
+		"description": "Grok pattern for SYSLOGBASE"
+	},
+	"COMMONAPACHELOG": {
+		"prefix": "grok pattern COMMONAPACHELOG",
+		"body": "COMMONAPACHELOG",
+		"description": "Grok pattern for COMMONAPACHELOG"
+	},
+	"COMBINEDAPACHELOG": {
+		"prefix": "grok pattern COMBINEDAPACHELOG",
+		"body": "COMBINEDAPACHELOG",
+		"description": "Grok pattern for COMBINEDAPACHELOG"
+	},
+	"LOGLEVEL": {
+		"prefix": "grok pattern LOGLEVEL",
+		"body": "LOGLEVEL",
+		"description": "Grok pattern for LOGLEVEL"
+	},
 }
